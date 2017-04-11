@@ -1,9 +1,9 @@
-# djangogo
+# Djangogo 1.0
 Spin up a production grade Django configuration on Ubuntu 16.04 LTS in minutes. 
 
 Let's face it, deploying Django can be time consuming and frustrating. This script relieves that pain, delivering a ready to go Supervisor, Guincorn, Nginx, Django, Postgres stack. 
 
-### Steps to Deploy Django on Digital Ocean or Ubuntu using Djangogo
+### Steps to Deploy Django on Digital Ocean or Linode using Djangogo
 
 1. Spin up a Linode or Digital Ocean Ubuntu 16.04 LTS instance.
 2. Login as root, paste djangogo.sh into your favorite server side editor.
@@ -12,7 +12,21 @@ Let's face it, deploying Django can be time consuming and frustrating. This scri
 5. Grab your favorite beverage, take a sip, browse to your IP address on completion.
 
 ### Notes
-When Ubuntu software is being upgrade, you may be asked a few questions. The defaults will usually work just fine. I've seen this happen with Grub. Also, you will be asked to enter in a password during the user creation step. Tested on Linode and Digital Ocean.
+When Ubuntu software is being upgrade, you may be asked a few questions. The defaults will usually work just fine. I've seen this happen with Grub. Also, you will be asked to enter in a password during the user creation step. Your settings.py will still use sqlite, to use Postgres edit:
+
+settings.py
+`
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'project_name_prod',
+        'USER': 'project_name',
+        'PASSWORD': 'project_password',
+        'HOST': 'localhost',
+        'PORT': '',
+    }
+}
+`
 
 ### Paths
 
