@@ -12,17 +12,17 @@ Let's face it, deploying Django can be time consuming and frustrating. This scri
 5. Grab your favorite beverage, take a sip, browse to your IP address on completion.
 
 ### Notes
-When Ubuntu software is being upgrade, you may be asked a few questions. The defaults will usually work just fine. I've seen this happen with Grub. Also, you will be asked to enter in a password during the user creation step.
+When Ubuntu software is being upgrade, you may be asked a few questions. The defaults will usually work just fine. I've seen this happen with Grub. Also, you will be asked to enter in a password during the user creation step. Tested on Linode and Digital Ocean.
+
+### Paths
 
 Your django project will reside in:
-/home/project_name/project_name/
+`/home/project_name/project_name/`
 
 To activate your virtualenv:
-source /home/project_name/bin/activate
+`source /home/project_name/bin/activate`
 
-Tested on Linode and Digital Ocean.
-
-MIT License Copyright (c) 2017 Dan Caron
+### MIT License Copyright (c) 2017 Dan Caron
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
