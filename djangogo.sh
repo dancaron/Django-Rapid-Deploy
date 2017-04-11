@@ -7,7 +7,7 @@ project_password="password"
 project_ip="000.000.000.000"
 project_domain="domain.com www.domain.com"
 # --------------------------------------------
-# NOTE: project_password servers as the password for the system
+# NOTE: project_password serves as the password for the system
 # user account that is created.
 # Usage (as root): "chmod +x djangogo.sh; ./djangogo.sh"
 # After code updates run: supervisorctl restart project_name
