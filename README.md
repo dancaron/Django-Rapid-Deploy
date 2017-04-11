@@ -15,7 +15,7 @@ Let's face it, deploying Django can be time consuming and frustrating. This scri
 When Ubuntu software is being upgrade, you may be asked a few questions. The defaults will usually work just fine. I've seen this happen with Grub. Also, you will be asked to enter in a password during the user creation step. Your settings.py will still use sqlite, to use Postgres edit:
 
 settings.py
-`
+~~~~
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
@@ -26,7 +26,7 @@ DATABASES = {
         'PORT': '',
     }
 }
-`
+~~~~
 
 ### Paths
 
