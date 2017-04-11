@@ -36,6 +36,20 @@ Your django project will reside in:
 To activate your virtualenv:
 `source /home/project_name/bin/activate`
 
+### Typical workflow to update your application
+
+~~~~
+ssh username@000.000.000.000
+
+source bin/activate
+cd project_name
+git pull origin master
+python manage.py collectstatic
+python manage.py migrate
+sudo supervisorctl restart project_name
+exit
+~~~~
+
 ### MIT License Copyright (c) 2017 Dan Caron
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
