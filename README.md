@@ -12,7 +12,7 @@ Let's face it, deploying Django can be time consuming and frustrating. This scri
 5. Grab your favorite beverage, take a sip, browse to your IP address on completion.
 
 ### Notes
-When Ubuntu software is being upgrade, you may be asked a few questions. The defaults will usually work just fine. I've seen this happen with Grub. Also, you will be asked to enter in a password during the user creation step. Your settings.py will still use sqlite, to use Postgres edit:
+When Ubuntu software is being upgraded, you may be asked a few questions. The defaults will usually work just fine. I've seen this happen with Grub. Also, you will be asked to enter in a password during the user creation step. Your settings.py will still use sqlite, to use Postgres edit:
 
 settings.py
 ~~~~
