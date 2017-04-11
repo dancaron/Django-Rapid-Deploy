@@ -1,7 +1,7 @@
 # Djangogo 1.0
 Spin up a production grade Django configuration on Ubuntu 16.04 LTS in minutes. 
 
-Let's face it, deploying Django can be time consuming and frustrating. This script relieves that pain, delivering a ready to go Supervisor, Guincorn, Nginx, Django, Postgres stack. 
+Let's face it, deploying Django can be time consuming and frustrating. This script relieves that pain, delivering a ready to go Supervisor, Guincorn, Nginx, Django, Postgres stack. After running the script, you will have a fully functioning Django installation running on Nginx and empty Django project. 
 
 ### Steps to Deploy Django on Digital Ocean or Linode using Djangogo
 
@@ -12,7 +12,10 @@ Let's face it, deploying Django can be time consuming and frustrating. This scri
 5. Grab your favorite beverage, take a sip, browse to your IP address on completion.
 
 ### Notes
-When Ubuntu software is being upgraded, you may be asked a few questions. The defaults will usually work just fine. I've seen this happen with Grub. Also, you will be asked to enter in a password during the user creation step. Your settings.py will still use sqlite, to use Postgres edit:
+When Ubuntu software is being upgraded, you may be asked a few questions. The defaults will usually work just fine. I've seen this happen with Grub. Also, you will be asked to enter in a password and typical user configuration details during the user account creation step. 
+
+### How to Switch from Sqlite to Postgres
+Sqlite is the default database, to use Postgres, simply edit:
 
 settings.py
 ~~~~
@@ -28,7 +31,7 @@ DATABASES = {
 }
 ~~~~
 
-### Paths
+### Relevant Paths
 
 Your django project will reside in:
 `/home/project_name/project_name/`
@@ -36,7 +39,7 @@ Your django project will reside in:
 To activate your virtualenv:
 `source /home/project_name/bin/activate`
 
-### Typical workflow to update your application
+### Typical Workflow to Update Your Application
 
 ~~~~
 ssh username@000.000.000.000
