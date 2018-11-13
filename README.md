@@ -35,7 +35,6 @@ git pull origin master
 python manage.py migrate
 python manage.py collectstatic
 sudo supervisorctl restart project_name
-exit
 ~~~~
 
 ### TODO
