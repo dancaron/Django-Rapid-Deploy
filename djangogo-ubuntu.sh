@@ -1,5 +1,5 @@
 #!/bin/sh
-# Ubuntu 16.04 LTS
+# Ubuntu 16.04 LTS / Ubuntu 18.04 LTS
 # CONFIGURE THE FOLLOWING SECTION 
 # --------------------------------------------
 project_name="name"
@@ -19,7 +19,7 @@ project_domain="domain.com www.domain.com"
 echo "[DJANGOGO] UPDATING SYSTEM, INSTALLING NGINX, PYTHON, SUPERVISOR & DEPENDENCIES..."
 sudo apt-get update
 sudo apt-get -y upgrade
-sudo apt-get -y install build-essential libpq-dev python-dev
+sudo apt-get -y install build-essential libpq-dev python-dev python3-venv
 sudo apt-get -y install postgresql postgresql-contrib
 sudo apt-get -y install nginx
 sudo apt-get -y install supervisor
@@ -48,7 +48,7 @@ gpasswd -a $project_name sudo
 # Django setup as project user
 su $project_name<<EOF
 cd /home/$project_name
-virtualenv -p python3 .
+python3 -m venv .
 source bin/activate
 pip install Django
 django-admin startproject project
