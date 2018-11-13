@@ -1,35 +1,20 @@
-# Djangogo 1.0
-Spin up a production grade Django configuration on Ubuntu 16.04 LTS in minutes. 
+# Djangogo 1.1
+Quickly spin up a production grade Django deployment!
 
 Let's face it, deploying Django can be time consuming and frustrating. This script relieves that pain, delivering a ready to go Supervisor, Guincorn, Nginx, Django, Postgres stack. After running the script, you will have a fully functioning Django installation running on Nginx and empty Django project. 
 
-### Steps to Deploy Django on Digital Ocean or Linode using Djangogo
+Tested on Ubuntu 16.04 LTS/ 18.04 LTS and Amazon Linux 2.
 
-1. Spin up a Linode or Digital Ocean Ubuntu 16.04 LTS instance.
+### How to Deploy Django on Amazon Web Services, Digital Ocean, or Linode
+
+1. Spin up an instance of your choosen distribution.
 2. Login as root, paste djangogo.sh into your favorite server side editor.
-3. Edit the four configuration variables at the top of the script and save the file.
+3. Edit the configuration variables at the top of the script and save the file.
 4. Run the script as root with: "chmod +x djangogo.sh; ./djangogo.sh"
-5. Grab your favorite beverage, take a sip, browse to your IP address on completion.
+5. Grab your favorite beverage, take a sip, browse to your IP address on completion. Note that on AWS, you will need to update your security policy to allow incoming traffic to port 80 on the instance.
 
 ### Notes
-When Ubuntu software is being upgraded, you may be asked a few questions. The defaults will usually work just fine. I've seen this happen with Grub. Also, you will be asked to enter in a password and typical user configuration details during the user account creation step. 
-
-### How to Switch from Sqlite to Postgres
-Sqlite is the default database, to use Postgres, simply edit:
-
-settings.py
-~~~~
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'project_name_prod',
-        'USER': 'project_name',
-        'PASSWORD': 'project_password',
-        'HOST': 'localhost',
-        'PORT': '',
-    }
-}
-~~~~
+When software is being upgraded, you may be asked a few questions. The defaults will usually work just fine. I've seen this happen with Grub. Also, you may be asked to enter in a password and during the user account creation step. 
 
 ### Relevant Paths
 
@@ -42,16 +27,21 @@ To activate your virtualenv:
 ### Typical Workflow to Update Your Application
 
 ~~~~
-ssh username@000.000.000.000
 
+cd ~project_name
 source bin/activate
-cd project_name
+cd ~project_name
 git pull origin master
-python manage.py collectstatic
 python manage.py migrate
+python manage.py collectstatic
 sudo supervisorctl restart project_name
 exit
 ~~~~
+
+### TODO
+
+* Bash command line arguments to make postgres (and other things) optional
+* Package with python and submit to pypi
 
 ### MIT License Copyright (c) 2017 Dan Caron
 
