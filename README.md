@@ -30,7 +30,7 @@ To activate your virtualenv:
 
 cd ~project_name
 source bin/activate
-cd ~project_name
+cd project_name
 git pull origin master
 python manage.py migrate
 python manage.py collectstatic
