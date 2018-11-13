@@ -1,5 +1,5 @@
 # Djangogo 1.1
-Quickly spin up a production grade Django deployment!
+Spin up a production grade Django deployment without breaking a sweat!
 
 Let's face it, deploying Django can be time consuming and frustrating. These scripts relieve that pain, delivering a ready to go Supervisor, Guincorn, Nginx, Django, Postgres stack. After running the script, you will have a fully functioning Django installation running on Nginx and empty Django project. Sure you could use Ansible, but you drink whiskey.
 
