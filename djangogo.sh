@@ -7,13 +7,16 @@ project_password="password"
 project_ip="000.000.000.000"
 project_domain="domain.com www.domain.com"
 # --------------------------------------------
-# NOTE: project_password serves as the password for the system
-# user account that is created.
-# Usage (as root): "chmod +x djangogo.sh; ./djangogo.sh"
-# After code updates run: supervisorctl restart project_name
+# NOTE: project_password serves as the password for postgres database that is created
+# USAGE:
+# From root home directory
+# sudo su - 
+# Edit project_name, project_ip, and project_domain variables above 
+# Then chmod +x djangogo.sh; ./djangogo.sh
+# If you are on AWS, make sure to change your security groups to allow for traffic on port 80
 
-# Install Dependencies
-echo "[DJANGOGO] UPDATING SYSTEM & INSTALLING DEPENDENCIES..."
+# Install nginx, python, supervisor and dependencies
+echo "[DJANGOGO] UPDATING SYSTEM, INSTALLING NGINX, PYTHON, SUPERVISOR & DEPENDENCIES..."
 sudo apt-get update
 sudo apt-get -y upgrade
 sudo apt-get -y install build-essential libpq-dev python-dev
@@ -37,10 +40,12 @@ psql -c "ALTER USER $project_name WITH PASSWORD '$project_password'"
 EOF
 cd /root
 
-# Add project user / add user to sudo file
-echo "[DJANGOGO] CREATING USER & DJANGO PROJECT..."
+# Create project user, venv, and setup django
+echo "[DJANGOGO] CREATING PROJECT USER, VENV & SETTING UP DJANGO..."
 adduser $project_name
 gpasswd -a $project_name sudo
+
+# Django setup as project user
 su $project_name<<EOF
 cd /home/$project_name
 virtualenv -p python3 .
@@ -55,32 +60,36 @@ cd ..
 django-admin startapp main
 pip install gunicorn
 EOF
+
+# Create gunicorn_start file
 echo "[DJANGOGO] CONFIGURING GUNICORN..."
-cd /home/$project_name
-touch bin/gunicorn_start
-cd bin
-echo '#!/bin/bash' >> gunicorn_start
-echo 'NAME="'$project_name'"' >> gunicorn_start
-echo 'DIR=/home/'$project_name'/'$project_name >> gunicorn_start
-echo 'USER='$project_name >> gunicorn_start
-echo 'GROUP='$project_name >> gunicorn_start
-echo 'WORKERS=3' >> gunicorn_start
-echo 'BIND=unix:/home/'$project_name'/run/gunicorn.sock' >> gunicorn_start
-echo 'DJANGO_SETTINGS_MODULE=project.settings' >> gunicorn_start
-echo 'DJANGO_WSGI_MODULE=project.wsgi' >> gunicorn_start
-echo 'LOG_LEVEL=error' >> gunicorn_start
-echo 'cd $DIR' >> gunicorn_start
-echo 'source /home/'$project_name'/bin/activate' >> gunicorn_start
-echo 'export DJANGO_SETTINGS_MODULE=$DJANGO_SETTINGS_MODULE' >> gunicorn_start
-echo 'export PYTHONPATH=$DIR:$PYTHONPATH' >> gunicorn_start
-echo 'exec /home/'$project_name'/bin/gunicorn ${DJANGO_WSGI_MODULE}:application \' >> gunicorn_start
-echo '  --name $NAME \' >> gunicorn_start
-echo '  --workers $WORKERS \' >> gunicorn_start
-echo '  --user=$USER \' >> gunicorn_start
-echo '  --group=$GROUP \' >> gunicorn_start
-echo '  --bind=$BIND \' >> gunicorn_start
-echo '  --log-level=$LOG_LEVEL \' >> gunicorn_start
-echo '  --log-file=-' >> gunicorn_start
+cd /home/$project_name/bin
+cat << EOF >> gunicorn_start
+#!/bin/bash
+NAME="$project_name"
+DIR=/home/$project_name/$project_name
+USER=$project_name
+GROUP=$project_name
+WORKERS=3
+BIND=unix:/home/$project_name/run/gunicorn.sock
+DJANGO_SETTINGS_MODULE=project.settings
+DJANGO_WSGI_MODULE=project.wsgi
+LOG_LEVEL=error
+cd \$DIR
+source /home/$project_name/bin/activate
+export DJANGO_SETTINGS_MODULE=\$DJANGO_SETTINGS_MODULE
+export PYTHONPATH=\$DIR:\$PYTHONPATH
+exec /home/$project_name/bin/gunicorn \${DJANGO_WSGI_MODULE}:application \\
+  --name \$NAME \\
+  --workers \$WORKERS \\
+  --user=\$USER \\
+  --group=\$GROUP \\
+  --bind=\$BIND \\
+  --log-level=\$LOG_LEVEL \\
+  --log-file=-
+EOF
+
+# Set permissions on gunicorn_start file and create gunicorn logs
 chmod u+x gunicorn_start
 chown $project_name gunicorn_start
 chgrp $project_name gunicorn_start
@@ -95,17 +104,17 @@ touch logs/gunicorn-error.log
 chown $project_name logs/gunicorn-error.log
 chgrp $project_name logs/gunicorn-error.log
 
-# Configure Supervisor for Gunicorn
+# Configure gunicorn on supervisor
 echo "[DJANGOGO] CONFIGURING SUPERVISOR FOR GUNICORN..."
-touch /etc/supervisor/conf.d/$project_name.conf
-cd /etc/supervisor/conf.d
-echo '[program:'$project_name']' >> $project_name.conf
-echo 'command=/home/'$project_name'/bin/gunicorn_start' >> $project_name.conf
-echo 'user='$project_name >> $project_name.conf
-echo 'autostart=true' >> $project_name.conf
-echo 'autorestart=true' >> $project_name.conf
-echo 'redirect_stderr=true' >> $project_name.conf
-echo 'stdout_logfile=/home/'$project_name'/logs/gunicorn-error.log' >> $project_name.conf
+cat << EOF >> /etc/supervisor/conf.d/$project_name.conf
+[program:$project_name]
+command=/home/$project_name/bin/gunicorn_start
+user=$project_name
+autostart=true
+autorestart=true
+redirect_stderr=true
+stdout_logfile=/home/$project_name/logs/gunicorn-error.log
+EOF
 
 # Restart Supervisor
 echo "[DJANGOGO] RESTARTING SUPERVISOR..."
@@ -116,46 +125,45 @@ sudo supervisorctl restart $project_name
 
 # Configure Nginx
 echo "[DJANGOGO] CONFIGURING NGINX..."
-touch /etc/nginx/sites-available/$project_name
-cd /etc/nginx/sites-available
 
-echo 'upstream app_server {' >> $project_name
-echo '    server unix:/home/'$project_name'/run/gunicorn.sock fail_timeout=0;' >> $project_name
-echo '}' >> $project_name
-echo '' >> $project_name
-echo 'server {' >> $project_name
-echo '    listen 80;' >> $project_name
-echo '' >> $project_name
-echo '    # add here the ip address of your server' >> $project_name
-echo '    # or a domain pointing to that ip (like example.com or www.example.com)' >> $project_name
-echo '    server_name '$project_ip' '$project_domain';' >> $project_name
-echo '' >> $project_name
-echo '    keepalive_timeout 5;' >> $project_name
-echo '    client_max_body_size 4G;' >> $project_name
-echo '' >> $project_name
-echo '    access_log /home/'$project_name'/logs/nginx-access.log;' >> $project_name
-echo '    error_log /home/'$project_name'/logs/nginx-error.log;' >> $project_name
-echo '' >> $project_name
-echo '    location /static/ {' >> $project_name
-echo '    alias /home/'$project_name'/'$project_name'/static/;' >> $project_name
-echo '    }' >> $project_name
-echo '' >> $project_name
-echo '    # checks for static file, if not found proxy to app' >> $project_name
-echo '    location / {' >> $project_name
-echo '      try_files $uri @proxy_to_app;' >> $project_name
-echo '    }' >> $project_name
-echo '' >> $project_name
-echo '    location @proxy_to_app {' >> $project_name
-echo '      proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;' >> $project_name
-echo '      proxy_set_header Host $http_host;' >> $project_name
-echo '      proxy_redirect off;' >> $project_name
-echo '      proxy_pass http://app_server;' >> $project_name
-echo '    }' >> $project_name
-echo '}' >> $project_name
+# Create project_name.conf in /etc/nginx/conf.d
+cat << EOF >> /etc/nginx/conf.d/$project_name.conf
+upstream app_server {
+    server unix:/home/$project_name/run/gunicorn.sock fail_timeout=0;
+}
 
-# Create symlinks and restart Nginx
-sudo ln -s /etc/nginx/sites-available/$project_name /etc/nginx/sites-enabled/$project_name
-sudo rm /etc/nginx/sites-enabled/default
+server {
+    listen 80;
+
+    # add here the ip address of your server
+    # or a domain pointing to that ip (like example.com or www.example.com)
+    server_name $project_ip $project_domain;
+
+    keepalive_timeout 5;
+    client_max_body_size 4G;
+
+    access_log /home/$project_name/logs/nginx-access.log;
+    error_log /home/$project_name/logs/nginx-error.log;
+
+    location /static/ {
+    alias /home/$project_name/$project_name/static/;
+    }
+
+    # checks for static file, if not found proxy to app
+    location / {
+      try_files \$uri @proxy_to_app;
+    }
+
+    location @proxy_to_app {
+      proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
+      proxy_set_header Host \$http_host;
+      proxy_redirect off;
+      proxy_pass http://app_server;
+    }
+}
+EOF
+
+# Restart nginx and you are good to go!
 echo "[DJANGOGO] RESTARTING NGINX..."
 sudo service nginx restart
 echo "[DJANGOGO] COMPLETE!"

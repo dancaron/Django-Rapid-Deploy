@@ -7,12 +7,14 @@ project_name="name"
 project_ip="000.000.000.000"
 project_domain="domain.com www.domain.com"
 # --------------------------------------------
-# sudo su -
-# chmod +x djangogo.sh
-# ./djangogo.sh"
-# After code updates run: supervisorctl restart project_name
+# USAGE:
+# From root home directory
+# sudo su - 
+# Edit project_name, project_ip, and project_domain variables above 
+# Then chmod +x djangogo.sh; ./djangogo.sh
+# If you are on AWS, make sure to change your security groups to allow for traffic on port 80
 
-# Install Dependencies
+# Install updates, nginx, python, pip and dependencies
 echo "[DJANGOGO] UPDATING SYSTEM & INSTALLING DEPENDENCIES..."
 sudo yum -y update
 sudo amazon-linux-extras install nginx1.12
@@ -21,16 +23,18 @@ curl -O https://bootstrap.pypa.io/get-pip.py
 python get-pip.py --user
 export PATH=~/.local/bin:$PATH
 
-# Install Supervisor
+# Install supervisor
 pip install -U supervisor
+
+# Create supervisor config file
 mkdir -p /etc/supervisor/conf.d
 echo_supervisord_conf > /etc/supervisor/supervisord.conf
-
 cat << EOF >> /etc/supervisor/supervisord.conf
 [include]
 files = /etc/supervisor/conf.d/*.conf
 EOF
 
+# Create supervisor config file for systemd
 cat << EOF >> /etc/systemd/system/supervisor.service
 # supervisord service for systemd
 [Unit]
@@ -49,14 +53,16 @@ RestartSec=42s
 WantedBy=multi-user.target
 EOF
 
+# Start supervisor from systemd
 sudo systemctl enable supervisor
 sudo systemctl start supervisor
 
-# Add project user / add user to sudo file
-echo "[DJANGOGO] CREATING USER & DJANGO PROJECT..."
+# Create project user, venv, and setup django
+echo "[DJANGOGO] CREATING PROJECT USER, VENV & SETUP DJANGO..."
 sudo adduser $project_name
 chmod 711 /home/$project_name
 
+# Django setup as project user
 sudo su $project_name<<EOF
 cd /home/$project_name
 python3 -m venv .
@@ -72,6 +78,7 @@ django-admin startapp main
 pip install gunicorn
 EOF
 
+# Create gunicorn_start file
 echo "[DJANGOGO] CONFIGURING GUNICORN..."
 cd /home/$project_name/bin
 cat << EOF >> gunicorn_start
@@ -98,6 +105,8 @@ exec /home/$project_name/bin/gunicorn \${DJANGO_WSGI_MODULE}:application \\
   --log-level=\$LOG_LEVEL \\
   --log-file=-
 EOF
+
+# Set permissions on gunicorn_start file and create gunicorn logs
 chmod u+x gunicorn_start
 chown $project_name gunicorn_start
 chgrp $project_name gunicorn_start
@@ -112,9 +121,8 @@ touch logs/gunicorn-error.log
 chown $project_name logs/gunicorn-error.log
 chgrp $project_name logs/gunicorn-error.log
 
-# Configure Supervisor for Gunicorn
+# Configure gunicorn on supervisor
 echo "[DJANGOGO] CONFIGURING SUPERVISOR FOR GUNICORN..."
-
 cat << EOF >> /etc/supervisor/conf.d/$project_name.conf
 [program:$project_name]
 command=/home/$project_name/bin/gunicorn_start
@@ -135,6 +143,7 @@ sudo supervisorctl restart $project_name
 # Configure Nginx
 echo "[DJANGOGO] CONFIGURING NGINX..."
 
+# Create project_name.conf in /etc/nginx/conf.d
 cat << EOF >> /etc/nginx/conf.d/$project_name.conf
 upstream app_server {
     server unix:/home/$project_name/run/gunicorn.sock fail_timeout=0;
@@ -171,6 +180,7 @@ server {
 }
 EOF
 
+# Restart nginx and you are good to go!
 echo "[DJANGOGO] RESTARTING NGINX..."
 sudo service nginx restart
 echo "[DJANGOGO] COMPLETE!"
