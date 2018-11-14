@@ -28,7 +28,7 @@ export PATH=~/.local/bin:$PATH
 
 # Install postgres
 echo "[DJANGOGO] INSTALL & CONFIGURE POSTGRES..."
-sudo yum install -y postgresql-server postgresql-contrib
+sudo yum install -y postgresql-server postgresql-contrib postgresql-devel
 sudo postgresql-setup initdb
 sudo systemctl start postgresql
 sudo systemctl enable postgresql
