@@ -16,19 +16,22 @@ project_domain="domain.com www.domain.com"
 # If you are on AWS, make sure to change your security groups to allow for traffic on port 80
 
 # Install nginx, python, supervisor and dependencies
-echo "[DJANGOGO] UPDATING SYSTEM, INSTALLING NGINX, PYTHON, SUPERVISOR & DEPENDENCIES..."
+echo "[DJANGOGO] UPDATING SYSTEM & INSTALLING DEPENDENCIES..."
 sudo apt-get update
 sudo apt-get -y upgrade
+echo "[DJANGOGO] INSTALL PYTHON 3 & BUILD ESSENTIALS..."
 sudo apt-get -y install build-essential libpq-dev python-dev python3-venv libssl-dev
-sudo apt-get -y install postgresql postgresql-contrib
+echo "[DJANGOGO] INSTALL NGINX.."
 sudo apt-get -y install nginx
+echo "[DJANGOGO] INSTALL & CONFIGURE SUPERVISOR.."
 sudo apt-get -y install supervisor
 sudo systemctl enable supervisor
 sudo systemctl start supervisor
 sudo apt-get -y install python-virtualenv git
 
 # Create Postgres
-echo "[DJANGOGO] SETTING UP POSTGRES..."
+echo "[DJANGOGO] INSTALL & CONFIGURE POSTGRES..."
+sudo apt-get -y install postgresql postgresql-contrib
 database_prefix=$project_name
 database_suffix="_prod"
 database_name=$database_prefix$database_suffix

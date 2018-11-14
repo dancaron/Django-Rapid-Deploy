@@ -4,9 +4,11 @@
 # CONFIGURE THE FOLLOWING SECTION
 # --------------------------------------------
 project_name="name"
+project_password="password"
 project_ip="000.000.000.000"
 project_domain="domain.com www.domain.com"
 # --------------------------------------------
+# NOTE: project_password serves as the password for postgres database that is created
 # USAGE:
 # From root home directory
 # sudo su - 
@@ -17,13 +19,32 @@ project_domain="domain.com www.domain.com"
 # Install updates, nginx, python, pip and dependencies
 echo "[DJANGOGO] UPDATING SYSTEM & INSTALLING DEPENDENCIES..."
 sudo yum -y update
+echo "[DJANGOGO] INSTALL NGINX.."
 sudo amazon-linux-extras install nginx1.12
+echo "[DJANGOGO] INSTALL PYTHON 3 & BUILD ESSENTIALS..."
 sudo yum install -y python3-pip python3 python3-setuptools python3-devel gcc gcc-c++ make openssl-devel
 curl -O https://bootstrap.pypa.io/get-pip.py
 python get-pip.py --user
 export PATH=~/.local/bin:$PATH
 
+# Install postgres
+echo "[DJANGOGO] INSTALL & CONFIGURE POSTGRES..."
+sudo yum install postgresql-server postgresql-contrib
+sudo postgresql-setup initdb
+sudo systemctl start postgresql
+sudo systemctl enable postgresql
+database_prefix=$project_name
+database_suffix="_prod"
+database_name=$database_prefix$database_suffix
+su postgres<<EOF
+cd ~
+createuser $project_name
+createdb $database_name --owner $project_name
+psql -c "ALTER USER $project_name WITH PASSWORD '$project_password'"
+EOF
+
 # Install supervisor
+echo "[DJANGOGO] INSTALL & CONFIGURE SUPERVISOR..."
 pip install -U supervisor
 
 # Create supervisor config file
