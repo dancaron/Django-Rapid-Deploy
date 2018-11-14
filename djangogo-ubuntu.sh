@@ -19,7 +19,7 @@ project_domain="domain.com www.domain.com"
 echo "[DJANGOGO] UPDATING SYSTEM, INSTALLING NGINX, PYTHON, SUPERVISOR & DEPENDENCIES..."
 sudo apt-get update
 sudo apt-get -y upgrade
-sudo apt-get -y install build-essential libpq-dev python-dev python3-venv
+sudo apt-get -y install build-essential libpq-dev python-dev python3-venv libssl-dev
 sudo apt-get -y install postgresql postgresql-contrib
 sudo apt-get -y install nginx
 sudo apt-get -y install supervisor
