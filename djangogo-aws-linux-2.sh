@@ -18,7 +18,7 @@ project_domain="domain.com www.domain.com"
 echo "[DJANGOGO] UPDATING SYSTEM & INSTALLING DEPENDENCIES..."
 sudo yum -y update
 sudo amazon-linux-extras install nginx1.12
-sudo yum install -y python3-pip python3 python3-setuptools
+sudo yum install -y python3-pip python3 python3-setuptools gcc gcc-c++ make 
 curl -O https://bootstrap.pypa.io/get-pip.py
 python get-pip.py --user
 export PATH=~/.local/bin:$PATH
