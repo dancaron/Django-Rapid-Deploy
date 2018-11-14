@@ -28,19 +28,20 @@ export PATH=~/.local/bin:$PATH
 
 # Install postgres
 echo "[DJANGOGO] INSTALL & CONFIGURE POSTGRES..."
-sudo yum install postgresql-server postgresql-contrib
+sudo yum install -y postgresql-server postgresql-contrib
 sudo postgresql-setup initdb
 sudo systemctl start postgresql
 sudo systemctl enable postgresql
 database_prefix=$project_name
 database_suffix="_prod"
 database_name=$database_prefix$database_suffix
-su postgres<<EOF
+su postgres << EOF
 cd ~
 createuser $project_name
 createdb $database_name --owner $project_name
 psql -c "ALTER USER $project_name WITH PASSWORD '$project_password'"
 EOF
+cd /root
 
 # Install supervisor
 echo "[DJANGOGO] INSTALL & CONFIGURE SUPERVISOR..."
