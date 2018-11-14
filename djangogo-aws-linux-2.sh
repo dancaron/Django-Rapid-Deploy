@@ -21,7 +21,7 @@ sudo yum -y update
 echo "[DJANGOGO] INSTALL NGINX.."
 sudo amazon-linux-extras install nginx1.12
 echo "[DJANGOGO] INSTALL PYTHON 3 & BUILD ESSENTIALS..."
-sudo yum install -y python3-pip python3 python3-setuptools python3-devel gcc gcc-c++ make openssl-devel
+sudo yum install -y python3-pip python3 python3-setuptools python3-devel gcc gcc-c++ make openssl-devel git
 curl -O https://bootstrap.pypa.io/get-pip.py
 python get-pip.py --user
 export PATH=~/.local/bin:$PATH
