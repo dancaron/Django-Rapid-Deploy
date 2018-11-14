@@ -1,6 +1,5 @@
 #!/bin/sh
 # Amazon Linux 2 EC2
-# Assumes RDS and No Postgres
 # CONFIGURE THE FOLLOWING SECTION
 # --------------------------------------------
 project_name="name"
