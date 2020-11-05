@@ -1,5 +1,5 @@
 #!/bin/sh
-# Ubuntu 16.04 LTS / Ubuntu 18.04 LTS
+# Ubuntu 20.10 LTS / Ubuntu 18.04 LTS
 # CONFIGURE THE FOLLOWING SECTION 
 # --------------------------------------------
 project_name="name"
@@ -20,7 +20,7 @@ echo "[DJANGOGO] UPDATING SYSTEM & INSTALLING DEPENDENCIES..."
 sudo apt-get update
 sudo apt-get -y upgrade
 echo "[DJANGOGO] INSTALL PYTHON 3 & BUILD ESSENTIALS..."
-sudo apt-get -y install build-essential libpq-dev python-dev python3-venv libssl-dev
+sudo apt-get -y install build-essential libpq-dev python3-dev python3-venv libssl-dev
 echo "[DJANGOGO] INSTALL NGINX.."
 sudo apt-get -y install nginx
 echo "[DJANGOGO] INSTALL & CONFIGURE SUPERVISOR.."
