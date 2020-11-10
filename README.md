@@ -1,13 +1,13 @@
 # Djangogo 1.2
-Spin up a production grade Django deployment without breaking a sweat!
+Spin up a production grade Django environment without breaking a sweat!
 
-Let's face it, deploying Django can be time consuming and frustrating. No one likes nginx 502 Bad Gateway errors. These scripts relieve that pain, delivering a ready to go Supervisor, Guincorn, Nginx, Django, Postgres stack. After running the script, you will have a fully functioning Django installation running on Nginx and empty Django project. Now includes certbot by default.
+Let's face it, setting up a production Django stack can be time consuming. No one likes nginx 502 Bad Gateway errors. This script relieves that pain, delivering a ready to go Supervisor, Guincorn, Nginx, Django, Postgres stack. After running the script, you'll have a fully functioning Django environment. All it requires is a few configuration variables set at the top of the script. Latest version now includes certbot by default.
 
 Successfully tested on Ubuntu 20.10
 
-### How to Deploy Django on Amazon Web Services, Digital Ocean, or Linode
+### How to Setup Your Django Environment Using Djangogo
 
-1. Spin up an instance of your choosen distribution.
+1. Spin up an instance of Ubuntu, on Linode, AWS, or Digital Ocean.
 2. Login as root, paste djangogo.sh into your favorite server side editor.
 3. Edit the configuration variables at the top of the script and save the file.
 4. Run the script as root with: "chmod +x djangogo.sh; ./djangogo.sh"
