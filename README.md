@@ -11,10 +11,10 @@ Successfully tested on Ubuntu 20.10
 2. Login as root, paste djangogo.sh into your favorite server side editor.
 3. Edit the configuration variables at the top of the script and save the file.
 4. Run the script as root with: "chmod +x djangogo.sh; ./djangogo.sh"
-5. Grab your favorite beverage, take a sip, browse to your IP address on completion. Note that on AWS, you will need to update your security policy to allow incoming traffic to port 80 on the instance.
+5. Grab your favorite beverage, take a sip, browse to your IP address on completion.
 
 ### Notes
-When software is being upgraded, you may be asked a few questions. The defaults will usually work just fine. I've seen this happen with Grub. Also, you may be asked to enter in a password and during the user account creation step. 
+When software is being upgraded, you may be asked a few questions. The defaults will work just fine. I've seen this happen with Grub. Also, you may be asked to enter in a password and during the user account creation step. 
 
 ### Relevant Paths
 
