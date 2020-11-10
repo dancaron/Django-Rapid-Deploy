@@ -19,8 +19,9 @@ project_domain="domain.com www.domain.com"
 echo "[DJANGOGO] UPDATING SYSTEM & INSTALLING DEPENDENCIES..."
 sudo apt-get update
 sudo apt-get -y upgrade
-echo "[DJANGOGO] INSTALL PYTHON 3 & BUILD ESSENTIALS..."
+echo "[DJANGOGO] INSTALL PYTHON 3, BUILD ESSENTIALS & CERTBOT..."
 sudo apt-get -y install build-essential libpq-dev python3-dev python3-venv libssl-dev
+sudo apt install certbot python3-certbot-nginx
 echo "[DJANGOGO] INSTALL NGINX.."
 sudo apt-get -y install nginx
 echo "[DJANGOGO] INSTALL & CONFIGURE SUPERVISOR.."
@@ -171,3 +172,4 @@ echo "[DJANGOGO] RESTARTING NGINX..."
 sudo service nginx restart
 echo "[DJANGOGO] COMPLETE!"
 echo "[DJANGOGO] VISIT: http://$project_ip"
+echo "[DJANGOGO] To install an EFF SSL Certificate use: sudo certbot --nginx -d example.com -d www.example.com"
