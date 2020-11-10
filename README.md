@@ -37,11 +37,6 @@ python manage.py collectstatic
 sudo supervisorctl restart project_name
 ~~~~
 
-### TODO
-
-* Bash command line arguments to make postgres (and other things) optional
-* Package with python and submit to pypi
-
 ### MIT License Copyright (c) 2020 Dan Caron
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
