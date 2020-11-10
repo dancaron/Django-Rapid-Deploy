@@ -1,4 +1,4 @@
-# Djangogo 1.1
+# Djangogo 1.2
 Spin up a production grade Django deployment without breaking a sweat!
 
 Let's face it, deploying Django can be time consuming and frustrating. No one likes nginx 502 Bad Gateway errors. These scripts relieve that pain, delivering a ready to go Supervisor, Guincorn, Nginx, Django, Postgres stack. After running the script, you will have a fully functioning Django installation running on Nginx and empty Django project. Now includes certbot by default.
