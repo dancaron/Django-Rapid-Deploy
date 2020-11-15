@@ -22,8 +22,10 @@ sudo apt-get -y upgrade
 echo "[DJANGOGO] INSTALL PYTHON 3, BUILD ESSENTIALS & CERTBOT..."
 sudo apt-get -y install build-essential libpq-dev python3-dev python3-venv libssl-dev
 sudo apt install certbot python3-certbot-nginx
-echo "[DJANGOGO] INSTALL NGINX.."
+echo "[DJANGOGO] INSTALL NGINX & APACHE BENCH..."
 sudo apt-get -y install nginx
+sudo apt-get install apache2-utils
+
 echo "[DJANGOGO] INSTALL & CONFIGURE SUPERVISOR.."
 sudo apt-get -y install supervisor
 sudo systemctl enable supervisor
