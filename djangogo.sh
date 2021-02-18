@@ -1,19 +1,18 @@
 #!/bin/sh
 # Ubuntu 20.10 LTS / Ubuntu 18.04 LTS
 # CONFIGURE THE FOLLOWING SECTION 
+# 'project_name' is used to create a user account and to prefix the postgres database name.
+# For example if your project name is "spacerock" your database will be "spacerock_prod" 
+# 'project_password' serves as the password for user and postgres database that are created. 
 # --------------------------------------------
 project_name="name"
 project_password="password"
 project_ip="000.000.000.000"
 project_domain="domain.com www.domain.com"
 # --------------------------------------------
-# NOTE: project_password serves as the password for postgres database that is created
-# USAGE:
-# From root home directory
-# sudo su - 
-# Edit project_name, project_ip, and project_domain variables above 
-# Then chmod +x djangogo.sh; ./djangogo.sh
-# If you are on AWS, make sure to change your security groups to allow for traffic on port 80
+# Edit variables above then 'chmod +x djangogo.sh; ./djangogo.sh'
+# If you are on Google Cloud or AWS, remember to open your firewall traffic on port 80 / 443.
+# Once your run certbot it will rewrite your nginx config to redirect all HTTP to HTTPS.
 
 # Install nginx, python, supervisor and dependencies
 echo "[DJANGOGO] UPDATING SYSTEM & INSTALLING DEPENDENCIES..."
