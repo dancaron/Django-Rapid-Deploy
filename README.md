@@ -49,7 +49,7 @@ To activate your virtualenv:
 ```
 ssh root@yourserver.com
 su project_name
-cd ~project_name
+cd ~
 source bin/activate
 cd project_name
 git pull origin master
