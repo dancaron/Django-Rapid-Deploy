@@ -1,4 +1,4 @@
-# Djangogo 1.2
+# DjangoGo 1.3
 Spin up a production grade Django environment without breaking a sweat!
 
 Let's face it, setting up a production Django stack can be time consuming. No one likes nginx 502 Bad Gateway errors. This script relieves that pain, delivering a ready to go Supervisor, Guincorn, Nginx, Django, Postgres stack. After running the script, you'll have a fully functioning Django environment. All it requires is a few configuration variables set at the top of the script. Latest version now includes certbot by default.
@@ -37,7 +37,7 @@ python manage.py collectstatic
 sudo supervisorctl restart project_name
 ~~~~
 
-### MIT License Copyright (c) 2020 Dan Caron
+### MIT License Copyright (c) 2021 Dan Caron
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
