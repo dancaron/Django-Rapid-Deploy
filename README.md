@@ -1,9 +1,10 @@
-# Django Rapid Deploy 1.3
+# Django Rapid Deploy
+Version 1.3. Successfully tested on Ubuntu 20.10
+
 Spin up a production grade Django environment without breaking a sweat!
 
 Let's face it, setting up a production Django stack can be time consuming. No one likes nginx 502 Bad Gateway errors. This script relieves that pain, delivering a ready to go Supervisor, Guincorn, Nginx, Django, Postgres stack. After running the script, you'll have a fully functioning Django environment. All it requires is a few configuration variables set at the top of the script. Latest version now includes certbot by default.
 
-Successfully tested on Ubuntu 20.10
 
 ### How to Setup Your Django Environment Using Djangogo
 
