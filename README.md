@@ -1,5 +1,5 @@
 # Django Rapid Deploy
-Version 1.3. Successfully tested on Ubuntu 20.10
+Version 1.4. Successfully tested on Ubuntu 21.04
 
 Spin up a production grade Django environment without breaking a sweat!
 
@@ -64,7 +64,7 @@ sudo supervisorctl restart project_name
 When software is being upgraded, you may be asked a few questions. The defaults will work just fine. I've seen this happen with Grub. Also, you may be asked to enter in a password and during the user account creation step. If you want to install an SSL certificate, you'll need to point your domain to your IP then run ```sudo certbot --nginx -d yourdomain.com -d www.yourdomain.com```
 
 
-### MIT License Copyright (c) 2021 Dan Caron
+### MIT License Copyright (c) 2022 Dan Caron @dancaron
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

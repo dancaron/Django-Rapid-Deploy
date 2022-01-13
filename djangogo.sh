@@ -76,7 +76,7 @@ DIR=/home/$project_name/$project_name
 USER=$project_name
 GROUP=$project_name
 WORKERS=3
-BIND=unix:/home/$project_name/run/gunicorn.sock
+BIND=unix:/tmp/gunicorn.sock
 DJANGO_SETTINGS_MODULE=project.settings
 DJANGO_WSGI_MODULE=project.wsgi
 LOG_LEVEL=error
@@ -134,7 +134,7 @@ echo "[DJANGOGO] CONFIGURING NGINX..."
 # Create project_name.conf in /etc/nginx/conf.d
 cat << EOF >> /etc/nginx/conf.d/$project_name.conf
 upstream app_server {
-    server unix:/home/$project_name/run/gunicorn.sock fail_timeout=0;
+    server unix:/tmp/gunicorn.sock fail_timeout=0;
 }
 
 server {
