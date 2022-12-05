@@ -63,6 +63,13 @@ sudo supervisorctl restart project_name
 ### Notes
 When software is being upgraded, you may be asked a few questions. The defaults will work just fine. I've seen this happen with Grub. Also, you may be asked to enter in a password and during the user account creation step. If you want to install an SSL certificate, you'll need to point your domain to your IP then run ```sudo certbot --nginx -d yourdomain.com -d www.yourdomain.com```
 
+### 403 Error Serving Static
+Nginx needs to be able to read the static folder. You can do this by adding the www-data user to the group that your project user is in.
+```
+sudo usermod -a -G your_user www-data
+```
+Then restart nginx.
+
 
 ### MIT License Copyright (c) 2022 Dan Caron @dancaron
 
